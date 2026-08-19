@@ -1,0 +1,23 @@
+{
+  "name": "fristaid-admin",
+  "version": "1.0.0",
+  "description": "AFRICASECOUR — dashboard admin (numéros d'urgence, interrupteur IA SOS, éditeur de contenu, vue d'ensemble). Appelle exclusivement les routes /admin/* du backend fristaid-backend, jamais d'accès direct à Neon.",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}
