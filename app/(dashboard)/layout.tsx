@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { href: '/emergency-contacts', label: "Numéros d'urgence" },
   { href: '/ai-sos-switch', label: 'Interrupteur IA SOS' },
   { href: '/courses', label: 'Cours' },
+  { href: '/orders', label: 'Commandes' },
 ];
 
 // Coquille visible sur toutes les pages du dashboard (déjà derrière le
