@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { CourseHeaderEditor } from '@/components/CourseHeaderEditor';
 import { LessonStepEditor } from '@/components/LessonStepEditor';
 import { VerifyBenchmarkButton } from '@/components/VerifyBenchmarkButton';
-import { adminFetch } from '@/lib/backendFetch';
+import { adminFetchOrRedirect } from '@/lib/backendFetch';
 
 type LessonStep = {
   id: string;
@@ -44,8 +44,8 @@ type EditHistoryEntry = {
 // Ministère de la Santé).
 export default async function CourseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const course = await adminFetch<CourseDetail>(`/admin/courses/${id}`);
-  const { history } = await adminFetch<{ history: EditHistoryEntry[] }>(`/admin/courses/${id}/edit-history`);
+  const course = await adminFetchOrRedirect<CourseDetail>(`/admin/courses/${id}`);
+  const { history } = await adminFetchOrRedirect<{ history: EditHistoryEntry[] }>(`/admin/courses/${id}/edit-history`);
 
   return (
     <div>

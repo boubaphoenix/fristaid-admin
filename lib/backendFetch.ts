@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+
 import { getSessionToken } from './session';
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL ?? 'http://localhost:4000';
@@ -51,4 +53,23 @@ export async function adminFetch<T>(
   }
 
   return data as T;
+}
+
+// À utiliser uniquement dans les Server Components de page (jamais dans les
+// route handlers API, qui doivent renvoyer un JSON d'erreur au client plutôt
+// que rediriger). Évite qu'un admin dont le cookie est présent mais le JWT
+// rejeté par le backend reste bloqué sur une page d'erreur générique au lieu
+// d'être renvoyé vers /login (audit sécurité 2026-08-20).
+export async function adminFetchOrRedirect<T>(
+  path: string,
+  options?: { method?: 'GET' | 'POST' | 'PUT' | 'DELETE'; body?: unknown },
+): Promise<T> {
+  try {
+    return await adminFetch<T>(path, options);
+  } catch (err) {
+    if (err instanceof BackendError && err.status === 401) {
+      redirect('/login');
+    }
+    throw err;
+  }
 }

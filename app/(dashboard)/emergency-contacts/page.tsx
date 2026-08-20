@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import * as Sentry from '@sentry/nextjs';
 
 import { ConfirmByRetypeModal } from '@/components/ConfirmByRetypeModal';
 
 export default function EmergencyContactsPage() {
+  const router = useRouter();
   const [contacts, setContacts] = useState<Record<string, string> | null>(null);
   const [draftValue, setDraftValue] = useState('');
   const [reason, setReason] = useState('');
@@ -15,15 +17,22 @@ export default function EmergencyContactsPage() {
 
   useEffect(() => {
     fetch('/api/admin/emergency-contacts')
-      .then((r) => r.json())
+      .then((r) => {
+        if (r.status === 401) {
+          router.replace('/login');
+          return null;
+        }
+        return r.json();
+      })
       .then((data) => {
+        if (!data) return;
         setContacts(data.contacts);
         setDraftValue(data.contacts?.samu ?? '');
       })
       .catch((err) => {
         Sentry.captureException(err, { tags: { screen: 'emergency-contacts' } });
       });
-  }, []);
+  }, [router]);
 
   async function handleConfirm() {
     setIsSubmitting(true);
@@ -34,6 +43,10 @@ export default function EmergencyContactsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contacts: { ...contacts, samu: draftValue }, reason }),
       });
+      if (response.status === 401) {
+        router.replace('/login');
+        return;
+      }
       const data = await response.json();
       if (!response.ok) {
         setError(data.error ?? 'Échec de la mise à jour.');

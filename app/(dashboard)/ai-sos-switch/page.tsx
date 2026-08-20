@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import * as Sentry from '@sentry/nextjs';
 
 import { ConfirmByRetypeModal } from '@/components/ConfirmByRetypeModal';
 
 export default function AiSosSwitchPage() {
+  const router = useRouter();
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [reason, setReason] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
@@ -14,12 +16,21 @@ export default function AiSosSwitchPage() {
 
   useEffect(() => {
     fetch('/api/admin/ai-sos-switch')
-      .then((r) => r.json())
-      .then((data) => setEnabled(data.enabled))
+      .then((r) => {
+        if (r.status === 401) {
+          router.replace('/login');
+          return null;
+        }
+        return r.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        setEnabled(data.enabled);
+      })
       .catch((err) => {
         Sentry.captureException(err, { tags: { screen: 'ai-sos-switch' } });
       });
-  }, []);
+  }, [router]);
 
   async function handleConfirm() {
     setIsSubmitting(true);
@@ -30,6 +41,10 @@ export default function AiSosSwitchPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: !enabled, reason }),
       });
+      if (response.status === 401) {
+        router.replace('/login');
+        return;
+      }
       const data = await response.json();
       if (!response.ok) {
         setError(data.error ?? 'Échec de la mise à jour.');

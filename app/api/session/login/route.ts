@@ -46,7 +46,10 @@ export async function POST(request: Request) {
   const store = await cookies();
   store.set(SESSION_COOKIE_NAME, data.token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // Sécurisé par défaut, y compris si NODE_ENV est absent/mal configuré au
+    // déploiement — seul le dev local explicite désactive Secure (nécessaire
+    // pour http://localhost), voir audit sécurité 2026-08-20.
+    secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
     path: '/',
     maxAge: SESSION_MAX_AGE_SECONDS,

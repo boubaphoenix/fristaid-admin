@@ -1,4 +1,4 @@
-import { adminFetch } from '@/lib/backendFetch';
+import { adminFetchOrRedirect } from '@/lib/backendFetch';
 
 type Overview = {
   active_users_trend: { period_days: number; points: { date: string; active_users: number }[] };
@@ -35,7 +35,7 @@ function CardTitle({ children, periodDays }: { children: React.ReactNode; period
 // (période, total de référence) plutôt qu'une valeur brute isolée (plan
 // §Design/UX : "aucun chiffre brut sans repère").
 export async function OverviewData() {
-  const data = await adminFetch<Overview>('/admin/overview');
+  const data = await adminFetchOrRedirect<Overview>('/admin/overview');
 
   const totalActiveLastDay = data.active_users_trend.points.at(-1)?.active_users ?? 0;
 

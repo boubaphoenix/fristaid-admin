@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { adminFetch } from '@/lib/backendFetch';
+import { adminFetchOrRedirect } from '@/lib/backendFetch';
 
 type CoursesResponse = {
   max_age_months: number;
@@ -18,7 +18,7 @@ type CoursesResponse = {
 // l'éditeur structuré par étape + historique d'édition (voir
 // app/(dashboard)/courses/[id]/page.tsx).
 export default async function CoursesPage() {
-  const data = await adminFetch<CoursesResponse>('/admin/courses');
+  const data = await adminFetchOrRedirect<CoursesResponse>('/admin/courses');
 
   return (
     <div>
