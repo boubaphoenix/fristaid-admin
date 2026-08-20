@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 import { ConfirmByRetypeModal } from '@/components/ConfirmByRetypeModal';
 
@@ -14,7 +15,10 @@ export default function AiSosSwitchPage() {
   useEffect(() => {
     fetch('/api/admin/ai-sos-switch')
       .then((r) => r.json())
-      .then((data) => setEnabled(data.enabled));
+      .then((data) => setEnabled(data.enabled))
+      .catch((err) => {
+        Sentry.captureException(err, { tags: { screen: 'ai-sos-switch' } });
+      });
   }, []);
 
   async function handleConfirm() {
@@ -34,6 +38,9 @@ export default function AiSosSwitchPage() {
       setEnabled(data.enabled);
       setShowConfirm(false);
       setReason('');
+    } catch (err) {
+      Sentry.captureException(err, { tags: { screen: 'ai-sos-switch' } });
+      setError('Échec de la mise à jour.');
     } finally {
       setIsSubmitting(false);
     }

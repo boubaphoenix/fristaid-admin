@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 
 import { adminFetch, BackendError } from '@/lib/backendFetch';
 
@@ -10,6 +11,7 @@ export async function GET() {
     const data = await adminFetch<{ contacts: Record<string, string> }>('/admin/emergency-contacts');
     return NextResponse.json(data);
   } catch (err) {
+    Sentry.captureException(err, { tags: { screen: 'emergency-contacts' } });
     if (err instanceof BackendError) return NextResponse.json({ error: err.message }, { status: err.status });
     throw err;
   }
@@ -24,6 +26,7 @@ export async function PUT(request: Request) {
     });
     return NextResponse.json(data);
   } catch (err) {
+    Sentry.captureException(err, { tags: { screen: 'emergency-contacts' } });
     if (err instanceof BackendError) return NextResponse.json({ error: err.message }, { status: err.status });
     throw err;
   }

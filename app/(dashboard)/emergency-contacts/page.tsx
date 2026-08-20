@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 import { ConfirmByRetypeModal } from '@/components/ConfirmByRetypeModal';
 
@@ -18,6 +19,9 @@ export default function EmergencyContactsPage() {
       .then((data) => {
         setContacts(data.contacts);
         setDraftValue(data.contacts?.samu ?? '');
+      })
+      .catch((err) => {
+        Sentry.captureException(err, { tags: { screen: 'emergency-contacts' } });
       });
   }, []);
 
@@ -38,6 +42,9 @@ export default function EmergencyContactsPage() {
       setContacts(data.contacts);
       setShowConfirm(false);
       setReason('');
+    } catch (err) {
+      Sentry.captureException(err, { tags: { screen: 'emergency-contacts' } });
+      setError('Échec de la mise à jour.');
     } finally {
       setIsSubmitting(false);
     }
