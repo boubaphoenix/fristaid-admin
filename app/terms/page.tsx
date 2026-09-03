@@ -5,13 +5,12 @@ export const metadata: Metadata = {
 };
 
 // Page publique (exclue de la garde d'authentification, voir proxy.ts).
-// Brouillon à faire valider par Ravi avant publication : ce n'est pas un
-// avis juridique.
+// Ce n'est pas un avis juridique.
 export default function TermsPage() {
   return (
     <main style={containerStyle}>
       <h1>Conditions d'utilisation</h1>
-      <p style={updatedStyle}>Dernière mise à jour : à compléter à la publication.</p>
+      <p style={updatedStyle}>Dernière mise à jour : 20 août 2026.</p>
 
       <h2>1. Objet</h2>
       <p>

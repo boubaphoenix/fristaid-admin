@@ -6,15 +6,15 @@ export const metadata: Metadata = {
 
 // Page publique (exclue de la garde d'authentification, voir proxy.ts) —
 // requise pour la publication sur Google Play / App Store et pour
-// l'écran de consentement Google Sign-In. Brouillon à faire valider par
-// Ravi avant publication : ce n'est pas un avis juridique, seulement un
-// texte cohérent avec les fonctionnalités réellement présentes dans le
-// produit (voir fristaid-backend/prisma/schema.prisma et fristaid-mobile).
+// l'écran de consentement Google Sign-In. Ce n'est pas un avis juridique,
+// seulement un texte cohérent avec les fonctionnalités réellement
+// présentes dans le produit (voir fristaid-backend/prisma/schema.prisma
+// et fristaid-mobile).
 export default function PrivacyPolicyPage() {
   return (
     <main style={containerStyle}>
       <h1>Politique de confidentialité</h1>
-      <p style={updatedStyle}>Dernière mise à jour : à compléter à la publication.</p>
+      <p style={updatedStyle}>Dernière mise à jour : 20 août 2026.</p>
 
       <p>
         AFRICASECOUR est une application de premiers secours. Cette page explique quelles données nous
