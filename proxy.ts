@@ -8,6 +8,12 @@ import { SESSION_COOKIE_NAME } from '@/lib/session';
 // admin/superadmin est revérifié à chaque requête backend par
 // `requireAdmin`, ce proxy ne fait que router vers /login si le cookie de
 // session est absent (il ne décode/valide jamais le JWT).
+//
+// La racine "/" et les pages publiques (site vitrine, voir plan Site web
+// africasecour.com) sont exclues via `config.matcher` ci-dessous — un admin
+// connecté visitant "/" verra donc la page d'accueil publique plutôt que
+// d'être redirigé vers /overview (choix de simplicité assumé : pas de
+// branche supplémentaire dans cette logique d'auth).
 export function proxy(request: NextRequest) {
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
   const isLoginRoute = request.nextUrl.pathname === '/login';
@@ -25,5 +31,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!privacy|terms|api/session/login|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!privacy|terms|mentions-legales|contact|\\.well-known|api/session/login|_next/static|_next/image|favicon\\.ico|$).*)',
+  ],
 };

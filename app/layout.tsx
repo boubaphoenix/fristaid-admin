@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'AFRICASECOUR — Dashboard admin',
-  description: 'Dashboard admin AFRICASECOUR',
+  title: 'AFRICASECOUR',
+  description: 'AFRICASECOUR — les gestes qui sauvent, accessibles à tous.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
