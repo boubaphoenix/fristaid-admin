@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 
 import { SESSION_COOKIE_NAME } from '@/lib/session';
 
@@ -28,7 +29,8 @@ export async function POST(request: Request) {
       body: JSON.stringify({ email, password }),
       cache: 'no-store',
     });
-  } catch {
+  } catch (err) {
+    Sentry.captureException(err, { tags: { screen: 'login' } });
     return NextResponse.json({ error: 'Serveur backend injoignable.' }, { status: 502 });
   }
 

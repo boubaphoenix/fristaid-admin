@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 
 import { adminFetch, BackendError } from '@/lib/backendFetch';
 
@@ -9,6 +10,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const data = await adminFetch(`/admin/courses/${id}/verify-benchmark`, { method: 'PUT', body });
     return NextResponse.json(data);
   } catch (err) {
+    Sentry.captureException(err, { tags: { screen: 'courses' } });
     if (err instanceof BackendError) return NextResponse.json({ error: err.message }, { status: err.status });
     throw err;
   }

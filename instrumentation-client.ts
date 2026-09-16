@@ -10,3 +10,8 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     sendDefaultPii: false,
   });
 }
+
+// Requis par le SDK pour instrumenter les transitions de route côté
+// navigateur (App Router) — sans cet export, Sentry avertit à chaque build
+// et les navigations ne sont pas tracées.
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

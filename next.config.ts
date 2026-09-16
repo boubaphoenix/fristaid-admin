@@ -13,7 +13,11 @@ export default withSentryConfig(nextConfig, {
   // au chemin webpack — sans ce flag explicite, les .js.map restent servis
   // publiquement sous /_next/static (audit sécurité 2026-08-20).
   widenClientFileUpload: true,
-  disableLogger: true,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
   sourcemaps: {
     deleteSourcemapsAfterUpload: true,
   },
